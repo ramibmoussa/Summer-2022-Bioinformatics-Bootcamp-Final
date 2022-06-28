@@ -1,0 +1,85 @@
+---
+title: "Bioinformatics Bootcamp 2022 Final Assessment"
+author: "Rami Moussa"
+date: '2022-06-27'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+This report is based on a study on humans exploring a connection between height, weight and other variables with hypertension, high blood pressure. The dataset included the following variables, listed with their definitions:
+
+-   Age: Age of the subject
+-   Gender: Gender of the subject
+-   Height: Height in centimeters
+-   Weight: Weight in kilograms
+-   BMI: The calculated body mass index
+-   Systolic: Systolic BP at the time of measurement
+-   Diastolic: Diastolic BP at the time of measurement
+
+Additionally, samples were separated by numerical person identifying numbers (ID). The objective is to investigate the relationship between hypertension and these various human health variables using bioinformatic and statistic techniques, utilizing the skills taught in the Summer 2022 Bioinformatics Bootcamp, led by Dr. Ali Imami.
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+rami <- read.csv("rami-dataset.csv")
+library(readr)
+library(dplyr)
+library(purrr)
+library(tables)
+library(janitor)
+library(vcd)
+library(scales)
+library(kableExtra)
+library(stringr)
+library(lessR)
+library(psych)
+```
+
+## Descriptive Statistics of Major Variables
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+describe(rami)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(lessR)
+PieChart(gender, data=rami)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+hist(rami$age)
+hist(rami$height)
+hist(rami$weight)
+hist(rami$bmi)
+hist(rami$systolic)
+hist(rami$diastolic)
+```
+
+## Linear Model Relating BMI with Systolic BP
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+plot(systolic ~ bmi, data=rami, main="Scatterplot of Systolic vs BMI")
+syslin <- lm(systolic ~ bmi, data=rami)
+abline(syslin, col=2, lwd=2)
+summary(syslin)
+```
+
+In the scatterplot above, the linear regression model relating body mass index with systolic blood pressure is presented with all sample data points displayed among a fitted line, which represents the relationship between these two variables. This graph has fitted systolic blood pressure along the y-axis, as the dependent variable, and body mass index, the independent variable, along the x-axis. As BMI increases, the systolic blood pressure increases. The graph shows a positive, moderately strong relationship among all data points. The fitted line, which is defined by the equation Systolic Blood Pressure = 124.65 + 0.7611(BMI) can be used to predict systolic blood pressure values based on body mass index.
+
+## Linear Model Relating BMI with Diastolic BP
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+plot(diastolic ~ bmi, data=rami, main="Scatterplot of Diastolic vs BMI")
+dialin <- lm(diastolic ~ bmi, data=rami)
+abline(dialin, col=2, lwd=2)
+summary(dialin)
+```
+
+In the scatterplot above, the linear regression model relating body mass index with diastolic blood pressure is presented with all sample data points displayed among a fitted line, which represents the relationship between these two variables. This graph has fitted diastolic blood pressure along the y-axis, as the dependent variable, and body mass index, the independent variable, along the x-axis. As BMI increases, the diastolic blood pressure increases. The graph shows a positive, moderately strong relationship among all data points. The fitted line, which is defined by the equation Diastolic Blood Pressure = 74.16 + 0.3265(BMI) can be used to predict diastolic blood pressure values based on body mass index.
+
+## Conclusions
+
+Given these results, both systolic and diastolic blood pressure increase as body mass increases. It should be noted that these relationships are similar, but have different magnitudes of strength. This means that the rate at which systolic blood pressure increases per unit increase in BMI is not the same as the rate at which diastolic blood pressure increases per unit increase in BMI. These differences are noted in the statistical analysis above, as the two linear regression models have different slope values. In conclusion, body mass index is positively associated with both systolic and diastolic blood presure. Increases in BMI would put people at risk for hypertension which numerous sub-optimal health conditions.
